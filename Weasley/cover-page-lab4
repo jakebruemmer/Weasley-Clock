@@ -1,0 +1,68 @@
+Jake Bruemmer Student ID: 419767 Lab 4 Cover Page
+
+Protocol
+
+My new buttons follow roughly the same protocol as the "query name" command that we had in the first 
+part of this lab. The protocol for my (1)Add Person, (2)Remove Person, (3)Add Location, (4)Remove Location
+buttons is:
+
+(1)"addPerson name" where name is a string of the person's name that you are looking to add. Once this 
+command has been written over the data stream in modified UTF format, the NetworkView takes the name,
+creates a new Person with that name, and then calls the addPerson() method in the Weasley class. The changes
+are shown on each WeasleyClock -- the name of my GUI -- in real time because each WeasleyClock is constantly
+asking the server about the model. Given that the addPerson() method changes the model, the changes show up 
+instantly on every WeasleyClock that is connected to the server. 
+
+(2)"dropPerson name" where name is a string of the person's name that you are looking to drop. The string is
+written over the data stream in modified UTF format. NetworkView does the same thing as in (1), but calls the
+dropPerson() method. I had to modify the Weasley class slightly to make sure that the the Person is 
+dropped from both the Map of Person to Locations and the Set of Persons in the Weasley model. This change 
+means that the "Persons" list in the WeasleyClock stays valid. 
+
+(3)"addLocation name" where name is a string of the location's name that you are looking to add. The string
+is written over the data stream in modified UTF format. NetworkView take the name, creates a new Location
+with that name and then calls the addLocation() method of the Weasley class. As in (1) and (2) the changes 
+that are made are reflected in the WeasleyClock because the WeasleyClock is constantly asking the server
+for this information about the model. 
+
+(4)"dropLocation name" where name is a string of the location's name that you are looking to drop. The 
+string is written over the data stream in modified UTF format. NetworkView does the same thing as in (3), but
+calls the dropLocation() method in the Weasley class. I had to modify the dropLocation() method to also remove
+the location from the Set of Locations in the Weasley model. This change meant that the display in the 
+WeasleyClock was updated in real time and was accurate. 
+
+I didn't make any changes to the protocol, but I did change the location from where I was writing commands 
+over the data stream. I write (1 - 4) from the WeasleyClock directly because my WeasleyClock has a Client
+as an instance varaible. This meant that I could write the commands over the data stream and then have those
+commands get updated to my GUI once the Client updated the JFrame elements that it contained. 
+
+I designed my GUI this way because it allowed me to write commands over the data stream from two locations.
+
+
+Sending Bad Messages from the Client
+
+I purposely designed my WeasleyClock -- my GUI -- to make it very difficult to send bad error messages from
+the Client to the Server. The only time that my WeasleyClock sends any messages over the data stream is when
+one of my buttons is pressed. This means that the messages that get sent are hard coded into the code of my 
+WeasleyClock as opposed to being text entries by the user. This reduces the likelihood that a bad message 
+will be sent at all. 
+
+There are 5 cases where my Client could send wrong messages: adding a person that already exists, adding a
+location that already exists, removing a person that doesn't exist, removing a location that doesn't exist,
+and searching for the people at a location that doesn't exist. In these cases, my WeasleyClock checks all 
+entries that are put into the text field and compares them with the instance Sets of people and places in my 
+client. If someone or somewhere exists or doesn't exist, and error message will get reported to the user in
+the "Here's what you did:" text area. 
+
+This could present some safety issues because my Client is the one that's checking the messages, but I think
+that it's fairly secure because the instance Sets in my Client that I'm checking the message against are being
+constantly updated from the Server to the Client over the data stream. That means that my sets are only altered
+by the Server.
+
+Server Side Errors
+
+There shouldn't be any server side errors from the way that I designed my WeasleyClock given that all of the 
+messages that are sent from the Server are read by the Client which updates my WeasleyClock. If you try to 
+remove someone that isn't there, remove someplace that isn't there, add someone already there, or add a place
+that's already there, then nothing will be sent to the server at all and the user on the Client side will see
+a message in their WeasleyClock telling them that they sent something wrong.

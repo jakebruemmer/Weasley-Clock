@@ -1,0 +1,16 @@
+CSE 132 Cover Page Lab W 3/5/2014
+
+Name: Jake Bruemmer      Wash U ID: 419767
+
+Perhaps the model's design is flawed, in the sense that it accounts for more than one Person. Would
+a better design have each model be Person specific?
+
+	Not necessarily. I think that the security issues that could arise in for a Person in the Weasley
+	would best be dealt with in the Person class itself. One way to solve the problem would be creating
+	a security measure, like a password or simple dialog box entry, that can be called be Persons that are
+	created with a "security" boolean or something similar. This would allow for one Weasley to account
+	for multiple Persons while also being more secure.
+	
+	I agree with the second questions about the front end. I think that any security issues that would
+	arise within the Weasley would best be dealt with on the front end rather than changing the model
+	entirely. 
